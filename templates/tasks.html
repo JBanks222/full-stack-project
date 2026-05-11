@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Queue - Study Vault</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body class="app-shell">
+    <aside class="sidebar">
+        <nav>
+            <ul>
+                <li><a href="/workspace">Workspace</a></li>
+                <li><a href="/tasks">Queue</a></li>
+                <li><a href="/journal">Journal</a></li>
+                <li><a href="/vault">Vault</a></li>
+                <li><a href="/settings">Settings</a></li>
+            </ul>
+        </nav>
+    </aside>
+    <main class="main-content">
+        <h1>Queue</h1>
+        <form class="add-task-form">
+            <input type="text" placeholder="New Task" required>
+            <button type="submit">Add Task</button>
+        </form>
+        <ul class="task-list">
+            <li class="task">
+                <input type="checkbox">
+                <span>Task 1</span>
+                <span class="category">Category</span>
+                <span class="status">Pending</span>
+                <button>Edit</button>
+                <button>Delete</button>
+            </li>
+            <li class="task completed">
+                <input type="checkbox" checked>
+                <span>Task 2</span>
+                <span class="category">Category</span>
+                <span class="status">Completed</span>
+                <button>Edit</button>
+                <button>Delete</button>
+            </li>
+        </ul>
+    </main>
+</body>
+</html>

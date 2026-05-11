@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vault - Study Vault</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body class="app-shell">
+    <aside class="sidebar">
+        <nav>
+            <ul>
+                <li><a href="/workspace">Workspace</a></li>
+                <li><a href="/tasks">Queue</a></li>
+                <li><a href="/journal">Journal</a></li>
+                <li><a href="/vault">Vault</a></li>
+                <li><a href="/settings">Settings</a></li>
+            </ul>
+        </nav>
+    </aside>
+    <main class="main-content">
+        <h1>Vault</h1>
+        <form class="upload-form">
+            <input type="file" accept="image/*">
+            <button type="submit">Upload</button>
+        </form>
+        <section class="note-grid">
+            <div class="note-card">
+                <div class="image-placeholder">Image</div>
+                <h2>Note Title</h2>
+                <p>Subject: Math</p>
+                <p>Uploaded: 2026-05-11</p>
+                <button>Preview</button>
+                <button>Download</button>
+            </div>
+            <div class="note-card">
+                <div class="image-placeholder">Image</div>
+                <h2>Note Title</h2>
+                <p>Subject: Science</p>
+                <p>Uploaded: 2026-05-10</p>
+                <button>Preview</button>
+                <button>Download</button>
+            </div>
+        </section>
+    </main>
+</body>
+</html>
