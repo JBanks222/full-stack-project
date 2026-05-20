@@ -20,11 +20,37 @@
     </aside>
     <main class="main-content">
         <h1>Post Editor</h1>
-        <form class="editor-form">
-            <input type="text" placeholder="Title" required>
-            <textarea placeholder="Write your post here..." required></textarea>
-            <button type="submit">Save Draft</button>
-            <button type="submit">Publish</button>
+        {% if error %}
+            <div class="error-message">{{ error }}</div>
+        {% endif %}
+        <form class="editor-form" method="POST" action="{{ url_for('post_editor') }}">
+            <label>
+                Title
+                <input type="text" name="title" placeholder="Write a compelling title" required>
+            </label>
+            <label>
+                Category
+                <select name="category">
+                    {% for category in categories %}
+                        <option value="{{ category }}">{{ category }}</option>
+                    {% endfor %}
+                </select>
+            </label>
+            <label>
+                Tags
+                <input type="text" name="tags" placeholder="separate tags with commas">
+            </label>
+            <label>
+                Content
+                <textarea name="content" rows="12" placeholder="Share study tips, experiences, or project insights" required></textarea>
+            </label>
+            <label class="checkbox-label">
+                <input type="checkbox" name="published" checked>
+                Publish immediately
+            </label>
+            <div class="editor-actions">
+                <button type="submit">Save Post</button>
+            </div>
         </form>
     </main>
 </body>

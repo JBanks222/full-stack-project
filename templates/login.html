@@ -10,7 +10,10 @@
     <div class="login-container">
         <h1 class="app-name">Study Vault</h1>
         <p class="subtitle">Your personal academic workspace.</p>
-        <form class="login-form">
+        <form class="login-form" method="POST" action="{{ url_for('login') }}">
+            {% if error %}
+            <p class="error">{{ error }}</p>
+            {% endif %}
             <label for="email">Email</label>
             <input type="email" id="email" name="email" placeholder="Enter your email" required>
 
@@ -19,6 +22,7 @@
 
             <button type="submit" class="btn">Login</button>
             <p class="helper-text">Forgot your password? Contact support.</p>
+            <p class="helper-text">Don't have an account? <a href="/signup">Sign up</a></p>
         </form>
     </div>
 </body>

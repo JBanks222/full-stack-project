@@ -20,28 +20,49 @@
     </aside>
     <main class="main-content">
         <h1>Vault</h1>
-        <form class="upload-form">
-            <input type="file" accept="image/*">
+        <form class="upload-form" method="POST" action="{{ url_for('upload_note') }}" enctype="multipart/form-data">
+            <label>
+                Upload note image
+                <input type="file" name="image" accept="image/*" required>
+            </label>
+            <label>
+                Title
+                <input type="text" name="title" placeholder="Note title">
+            </label>
+            <label>
+                Subject / Topic
+                <input type="text" name="subject" placeholder="e.g. Calculus, Chemistry">
+            </label>
             <button type="submit">Upload</button>
         </form>
-        <section class="note-grid">
-            <div class="note-card">
-                <div class="image-placeholder">Image</div>
-                <h2>Note Title</h2>
-                <p>Subject: Math</p>
-                <p>Uploaded: 2026-05-11</p>
-                <button>Preview</button>
-                <button>Download</button>
+
+        <div class="upload-preview hidden">
+            <h2>Upload Preview</h2>
+            <div class="note-card preview-card">
+                <div class="image-placeholder preview-image"></div>
+                <h2 id="preview-title">Note preview</h2>
+                <p id="preview-subject">Subject will appear here</p>
             </div>
-            <div class="note-card">
-                <div class="image-placeholder">Image</div>
-                <h2>Note Title</h2>
-                <p>Subject: Science</p>
-                <p>Uploaded: 2026-05-10</p>
-                <button>Preview</button>
-                <button>Download</button>
-            </div>
-        </section>
+        </div>
+
+        {% if notes %}
+            <section class="note-grid">
+                {% for note in notes %}
+                    <div class="note-card">
+                        <img class="note-image" src="{{ url_for('static', filename='uploads/' ~ note.filename) }}" alt="{{ note.title }}">
+                        <h2>{{ note.title }}</h2>
+                        <p>Subject: {{ note.subject }}</p>
+                        <p>Uploaded: {{ note.uploaded_at.strftime('%Y-%m-%d') }}</p>
+                        <div class="card-actions">
+                            <a class="btn secondary" href="{{ url_for('note_preview', note_id=note.id) }}">Preview</a>
+                            <a class="btn" href="{{ url_for('download_note', note_id=note.id) }}">Download</a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </section>
+        {% else %}
+            <p>No notes uploaded yet. Upload an image to save it here.</p>
+        {% endif %}
     </main>
 </body>
 </html>

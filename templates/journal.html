@@ -19,28 +19,34 @@
         </nav>
     </aside>
     <main class="main-content">
-        <h1>Journal</h1>
-        <button class="new-entry">New Entry</button>
-        <section class="journal-cards">
-            <div class="journal-card">
-                <h2>Title 1</h2>
-                <p>Excerpt of the journal entry...</p>
-                <span>Date: 2026-05-11</span>
-                <div class="actions">
-                    <button>Like</button>
-                    <button>Comment</button>
-                </div>
-            </div>
-            <div class="journal-card">
-                <h2>Title 2</h2>
-                <p>Excerpt of another journal entry...</p>
-                <span>Date: 2026-05-10</span>
-                <div class="actions">
-                    <button>Like</button>
-                    <button>Comment</button>
-                </div>
-            </div>
-        </section>
+        <div class="page-header">
+            <h1>Blog</h1>
+            <a class="btn secondary" href="/post_editor">Write a Post</a>
+        </div>
+
+        {% if posts %}
+            <section class="post-grid">
+                {% for post in posts %}
+                    <article class="post-card">
+                        <div class="post-meta">
+                            <span class="category">{{ post.category }}</span>
+                            {% if post.tags %}
+                                <span class="tag-pill">{{ post.tags }}</span>
+                            {% endif %}
+                        </div>
+                        <h2><a href="{{ url_for('post_detail', post_id=post.id) }}">{{ post.title }}</a></h2>
+                        <p>{{ post.content[:180] }}{% if post.content|length > 180 %}...{% endif %}</p>
+                        <div class="post-footer">
+                            <span>{{ post.published_at.strftime('%Y-%m-%d') }}</span>
+                            <span>{{ post.comments|length }} comments</span>
+                            <span>{{ post.likes|length }} likes</span>
+                        </div>
+                    </article>
+                {% endfor %}
+            </section>
+        {% else %}
+            <p>No blog posts published yet. Start one by clicking "Write a Post".</p>
+        {% endif %}
     </main>
 </body>
 </html>

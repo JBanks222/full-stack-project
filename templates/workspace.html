@@ -19,29 +19,71 @@
         </nav>
     </aside>
     <main class="main-content">
-        <h1>Welcome back</h1>
+        <div class="workspace-header">
+            <div>
+                <h1>Welcome back</h1>
+                <p class="subtext">{{ user_email }}</p>
+            </div>
+            <a class="btn secondary" href="/tasks">Go to Queue</a>
+        </div>
+
         <section class="stats">
-            <div class="stat-card">Active Tasks: 5</div>
-            <div class="stat-card">Completed Tasks: 12</div>
-            <div class="stat-card">Journal Posts: 8</div>
-            <div class="stat-card">Uploaded Notes: 20</div>
+            <div class="stat-card">Active Tasks: {{ active_tasks_count }}</div>
+            <div class="stat-card">Completed Tasks: {{ completed_tasks_count }}</div>
+            <div class="stat-card">Journal Posts: {{ posts_count }}</div>
+            <div class="stat-card">Uploaded Notes: {{ notes_count }}</div>
         </section>
+
         <section class="recent-items">
-            <h2>Recent Tasks</h2>
-            <ul>
-                <li>Task 1</li>
-                <li>Task 2</li>
-            </ul>
-            <h2>Recent Journal Entries</h2>
-            <ul>
-                <li>Entry 1</li>
-                <li>Entry 2</li>
-            </ul>
-            <h2>Recent Uploaded Notes</h2>
-            <ul>
-                <li>Note 1</li>
-                <li>Note 2</li>
-            </ul>
+            <div class="recent-column">
+                <h2>Recent Tasks</h2>
+                {% if active_tasks %}
+                    <ul>
+                        {% for task in active_tasks %}
+                            <li>
+                                <strong>{{ task.title }}</strong>
+                                {% if task.due_date %}
+                                    <span class="meta">due {{ task.due_date.strftime('%Y-%m-%d') }}</span>
+                                {% endif %}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p>No active tasks yet. Add one in Queue.</p>
+                {% endif %}
+            </div>
+
+            <div class="recent-column">
+                <h2>Recent Blog Posts</h2>
+                {% if recent_posts %}
+                    <ul>
+                        {% for post in recent_posts %}
+                            <li>
+                                <a href="{{ url_for('post_detail', post_id=post.id) }}">{{ post.title }}</a>
+                                <span class="meta">{{ post.published_at.strftime('%Y-%m-%d') }}</span>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p>No published posts yet. Share a learning experience.</p>
+                {% endif %}
+            </div>
+
+            <div class="recent-column">
+                <h2>Recent Notes</h2>
+                {% if recent_notes %}
+                    <ul>
+                        {% for note in recent_notes %}
+                            <li>
+                                <a href="{{ url_for('note_preview', note_id=note.id) }}">{{ note.title }}</a>
+                                <span class="meta">{{ note.subject }}</span>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p>No notes uploaded yet. Add one in Vault.</p>
+                {% endif %}
+            </div>
         </section>
     </main>
 </body>

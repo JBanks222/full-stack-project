@@ -20,28 +20,108 @@
     </aside>
     <main class="main-content">
         <h1>Queue</h1>
-        <form class="add-task-form">
-            <input type="text" placeholder="New Task" required>
-            <button type="submit">Add Task</button>
-        </form>
-        <ul class="task-list">
-            <li class="task">
-                <input type="checkbox">
-                <span>Task 1</span>
-                <span class="category">Category</span>
-                <span class="status">Pending</span>
-                <button>Edit</button>
-                <button>Delete</button>
-            </li>
-            <li class="task completed">
-                <input type="checkbox" checked>
-                <span>Task 2</span>
-                <span class="category">Category</span>
-                <span class="status">Completed</span>
-                <button>Edit</button>
-                <button>Delete</button>
-            </li>
-        </ul>
+
+        <section class="task-panel">
+            <form class="add-task-form" method="POST" action="{{ url_for('add_task') }}">
+                <label>
+                    Task
+                    <input type="text" name="title" placeholder="Describe your task" required>
+                </label>
+                <label>
+                    Category
+                    <select name="category">
+                        {% for category in categories %}
+                            <option value="{{ category }}">{{ category }}</option>
+                        {% endfor %}
+                    </select>
+                </label>
+                <label>
+                    Due Date
+                    <input type="date" name="due_date">
+                </label>
+                <label>
+                    Reminder
+                    <input type="datetime-local" name="reminder">
+                </label>
+                <button type="submit">Add Task</button>
+            </form>
+        </section>
+
+        <section class="task-list-panel">
+            {% if tasks %}
+                <div class="task-header-row">
+                    <span>Task</span>
+                    <span>Category</span>
+                    <span>Due</span>
+                    <span>Reminder</span>
+                    <span>Status</span>
+                    <span>Actions</span>
+                </div>
+                <div class="task-list">
+                    {% for task in tasks %}
+                        {% set due_display = task.due_date.strftime('%Y-%m-%d') if task.due_date else 'No due date' %}
+                        {% set reminder_display = task.reminder.strftime('%Y-%m-%d %H:%M') if task.reminder else 'No reminder' %}
+                        <article class="task-card {% if task.completed %}completed{% endif %}">
+                            <div class="task-row">
+                                <form class="task-toggle-form" method="POST" action="{{ url_for('update_task', task_id=task.id) }}">
+                                    <input type="hidden" name="title" value="{{ task.title }}">
+                                    <input type="hidden" name="category" value="{{ task.category }}">
+                                    <input type="hidden" name="due_date" value="{{ task.due_date.isoformat() if task.due_date else '' }}">
+                                    <input type="hidden" name="reminder" value="{{ task.reminder.isoformat() if task.reminder else '' }}">
+                                    <label class="task-checkbox">
+                                        <input type="checkbox" name="completed" onchange="this.form.submit()" {% if task.completed %}checked{% endif %}>
+                                        <span>{{ task.title }}</span>
+                                    </label>
+                                </form>
+                                <span>{{ task.category }}</span>
+                                <span>{{ due_display }}</span>
+                                <span>{{ reminder_display }}</span>
+                                <span class="status">{{ 'Completed' if task.completed else 'Pending' }}</span>
+                                <button type="button" class="edit-task" data-task-id="{{ task.id }}">Edit</button>
+                            </div>
+
+                            <form class="task-edit-form hidden" method="POST" action="{{ url_for('update_task', task_id=task.id) }}">
+                                <label>
+                                    Task
+                                    <input type="text" name="title" value="{{ task.title }}" required>
+                                </label>
+                                <label>
+                                    Category
+                                    <select name="category">
+                                        {% for category in categories %}
+                                            <option value="{{ category }}" {% if task.category == category %}selected{% endif %}>{{ category }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </label>
+                                <label>
+                                    Due Date
+                                    <input type="date" name="due_date" value="{{ task.due_date.isoformat() if task.due_date else '' }}">
+                                </label>
+                                <label>
+                                    Reminder
+                                    <input type="datetime-local" name="reminder" value="{{ task.reminder.strftime('%Y-%m-%dT%H:%M') if task.reminder else '' }}">
+                                </label>
+                                <label class="task-checkbox-edit">
+                                    <input type="checkbox" name="completed" {% if task.completed %}checked{% endif %}>
+                                    Mark completed
+                                </label>
+                                <div class="task-edit-actions">
+                                    <button type="submit">Save</button>
+                                    <button type="button" class="cancel-edit" data-task-id="{{ task.id }}">Cancel</button>
+                                </div>
+                            </form>
+
+                            <form class="task-delete-form" method="POST" action="{{ url_for('delete_task', task_id=task.id) }}" onsubmit="return confirm('Delete this task?');">
+                                <button type="submit" class="danger">Delete</button>
+                            </form>
+                        </article>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p>You have no tasks yet. Add one above to get started.</p>
+            {% endif %}
+        </section>
     </main>
+    <script src="/static/js/main.js"></script>
 </body>
 </html>
